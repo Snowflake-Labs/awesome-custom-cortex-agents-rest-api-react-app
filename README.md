@@ -156,7 +156,7 @@ The application will automatically launch on [http://localhost:3000](http://loca
 
 ### Demo
 
-
+https://github.com/user-attachments/assets/93aadf96-d272-46a4-b36d-72b97236688f
 
 ### Usage 
 
