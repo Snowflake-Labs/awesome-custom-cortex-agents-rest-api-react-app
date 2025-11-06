@@ -13,6 +13,23 @@ export interface SqlQueryWithVerification {
   };
 }
 
+export interface TextAnnotation {
+  type: string;
+  start_index?: number;
+  end_index?: number;
+  annotation_index?: number;
+  content_index?: number;
+  text?: string;
+  url?: string;
+  title?: string;
+  source?: string;
+  doc_id?: string;
+  doc_title?: string;
+  search_result_id?: string;
+  index?: number;
+  [key: string]: any; // Allow additional properties
+}
+
 export interface ChatMessage {
   id: string;
   text: string;
@@ -26,8 +43,9 @@ export interface ChatMessage {
   thinkingTexts?: string[];
   sqlQueries?: SqlQueryWithVerification[];
   charts?: any[]; // Using any[] for now, can be refined based on chart types
+  annotations?: TextAnnotation[]; // Metadata about the response text (citations, sources, etc.)
   timeline?: Array<{
-    type: 'status' | 'thinking' | 'tool' | 'sql' | 'chart';
+    type: 'status' | 'thinking' | 'tool' | 'sql' | 'chart' | 'annotation';
     content: string;
     timestamp?: Date;
     contentIndex?: number;

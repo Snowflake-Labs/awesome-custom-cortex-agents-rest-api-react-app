@@ -128,14 +128,22 @@ const validateEnvironment = () => {
             marginBottom: '1rem'
           }}>
             <p style={{ marginBottom: '0.5rem', fontWeight: '600' }}>
-              Required Environment Variable:
+              Required Environment Variables:
             </p>
             <ul style={{ paddingLeft: '1rem', lineHeight: '1.6' }}>
-              <li>REACT_APP_BACKEND_URL</li>
+              <li>REACT_APP_ACCOUNT</li>
+              <li>REACT_APP_HOST</li>
+              <li>REACT_APP_WAREHOUSE</li>
+              <li>REACT_APP_DEMO_USER</li>
+              <li>REACT_APP_DEMO_USER_ROLE</li>
+              <li>REACT_APP_PAT</li>
+              <li>REACT_APP_AGENT_ENDPOINT</li>
+              <li>REACT_APP_DATABASE</li>
+              <li>REACT_APP_SCHEMA</li>
             </ul>
           </div>
           <p style={{ fontSize: '0.875rem', opacity: 0.8 }}>
-            This must be set when building the app. Example: REACT_APP_BACKEND_URL=https://your-backend.com npm run build
+            Please create a .env file in the project root with all required variables.
           </p>
         </div>
       </div>

@@ -3,6 +3,8 @@
 
 This guide provides the instructions to build custom application for the data agents you have already built in your Snowflake account. The LLM orchestration, planning, thinking, deep reasoning, and execution of SQL queries, etc. (similar to [ai.snowflake.com](ai.snowflake.com)) is powered by [Snowflake Cortex Agents](https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-agents) via the [REST API](https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-agents-rest-api) and the interface is built with TypeScript and Material-UI.
 
+Use this as a starter project or template and extend or customize it. Also note that agents can make mistakes, so double-check responses.
+
 ## Table of Contents
 - [Prerequisites](#prerequisites)
 - [Setup Steps](#setup-steps)
@@ -51,7 +53,7 @@ Clone this repository to get the required files.
     <details>
 
     ```
-    ├── src/                                   # Frontend React application
+    ├── src/                                   # Frontend React application (client-side)
     │   ├── components/                        # UI Components
     │   │   ├── Main.tsx                       # Main chat interface
     │   │   ├── ChartVisualization.tsx         # Chart rendering with Recharts
@@ -94,13 +96,13 @@ Clone this repository to get the required files.
     │   │   └── theme.ts                       # Dark/Light theme definitions
     │   │
     │   ├── config/                            # App configuration
-    │   │   └── env.ts                         # Environment variable validation
+    │   │   └── env.ts                         # Environment variable validation & type-safe access
     │   │
-    │   └── index.tsx                          # App entry point with ErrorBoundary
+    │   └── index.tsx                          # App entry point
     │
-    ├── server/                                # Backend proxy server (Node.js/Express)
-    │   ├── server.js                          # Express server (PAT secured here)
-    │   └── constants.js                       # Server constants & error messages
+    ├── server/                                # Minimal backend for proxying API requests and securing the PAT (Node.js/Express)
+    │   ├── server.js                          # Express server (PAT used only server-side for API calls; never exposed to frontend)
+    │   └── constants.js                       # Server constants, error messages, and (if applicable) configuration/env validation
     │
     ├── public/                                # Static assets
     │   ├── images/                            # Logos and icons
@@ -170,6 +172,7 @@ https://github.com/user-attachments/assets/03cdaf49-51aa-4f8b-8bf8-26310249f169
 * Example questions (if any) for the selected agent 
 * Streaming responses
 * Charts and tables
+* Citations
 * Executed SQL(s) with "Answer accuracy verified by agent owner" indicated when applicable 
 * Audio prompt (requires microphone access in the browser)
 * Copy-to-clipboard and/or ask the same question
@@ -178,7 +181,6 @@ https://github.com/user-attachments/assets/03cdaf49-51aa-4f8b-8bf8-26310249f169
 
 ### Future Enhancements
 
-* Citations
 * Threading
 
 ### Common Issues

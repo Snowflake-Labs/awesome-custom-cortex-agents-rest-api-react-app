@@ -271,6 +271,49 @@ export const useChatMessages = (selectedAgent: string) => {
                     // Skip malformed chart data
                   }
                 }
+              } else if (currentEvent === 'response.text.annotation') {
+                // Handle annotations (citations, sources, references, etc.)
+                if (data) {
+                  try {
+                    // Extract annotation from nested structure
+                    const annotationData = data.annotation || data;
+                    
+                    const annotation = {
+                      type: annotationData.type || 'citation',
+                      start_index: data.start_index,
+                      end_index: data.end_index,
+                      annotation_index: data.annotation_index,
+                      content_index: data.content_index,
+                      text: annotationData.text,
+                      url: annotationData.doc_id, // Use doc_id as URL
+                      title: annotationData.doc_title,
+                      source: annotationData.source,
+                      doc_id: annotationData.doc_id,
+                      search_result_id: annotationData.search_result_id,
+                      index: annotationData.index
+                    };
+                    
+                    setMessages(prev => prev.map(msg => 
+                      msg.id === assistantMessageId
+                        ? {
+                            ...msg,
+                            annotations: [...(msg.annotations || []), annotation],
+                            timeline: [
+                              ...(msg.timeline || []),
+                              { 
+                                type: 'annotation', 
+                                content: `Citation: ${annotation.title || 'Reference'}`, 
+                                timestamp: new Date() 
+                              }
+                            ]
+                          }
+                        : msg
+                    ));
+                  } catch (annotationError) {
+                    // Skip malformed annotation data
+                    console.warn('Failed to process annotation:', annotationError);
+                  }
+                }
               }
             } catch (parseError) {
               // Skip malformed streaming data

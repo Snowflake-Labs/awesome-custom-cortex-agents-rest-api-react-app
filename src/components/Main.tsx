@@ -41,6 +41,7 @@ const SimpleChatInterface: React.FC = () => {
   const thinkingAccordion = useAccordionState();
   const sqlQueriesAccordion = useAccordionState();
   const chartsAccordion = useAccordionState();
+  const annotationsAccordion = useAccordionState();
   
   // Input state
   const [inputText, setInputText] = useState('');
@@ -97,6 +98,7 @@ const SimpleChatInterface: React.FC = () => {
     thinkingAccordion.reset();
     sqlQueriesAccordion.reset();
     chartsAccordion.reset();
+    annotationsAccordion.reset();
     setManuallyToggledCharts(new Set());
   }, [selectedAgent]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -191,10 +193,11 @@ const SimpleChatInterface: React.FC = () => {
     thinkingAccordion.reset();
     sqlQueriesAccordion.reset();
     chartsAccordion.reset();
+    annotationsAccordion.reset();
     setManuallyToggledCharts(new Set());
     setStarterQuestionsExpanded(true);
     refreshAgents();
-  }, [clearMessages, thinkingAccordion, sqlQueriesAccordion, chartsAccordion, refreshAgents]);
+  }, [clearMessages, thinkingAccordion, sqlQueriesAccordion, chartsAccordion, annotationsAccordion, refreshAgents]);
 
   // Handle chart toggle with manual tracking
   const handleChartToggle = useCallback((messageId: string) => {
@@ -276,7 +279,7 @@ const SimpleChatInterface: React.FC = () => {
         }}>
           <Stack spacing={3} alignItems="center" sx={{ px: 3, width: { xs: '100%', sm: '98%' }, maxWidth: 1200 }}>
              {(() => {
-                // Ensure configError is a string
+                // configError is already a string from the hook
                 const errorString = configError || 'An error occurred';
                 
                 // Split error message: first line is the header, rest goes in the box
@@ -431,9 +434,11 @@ const SimpleChatInterface: React.FC = () => {
                   collapsedThinking={thinkingAccordion.isCollapsed(message.id)}
                   collapsedSqlQueries={sqlQueriesAccordion.isCollapsed(message.id)}
                   collapsedCharts={chartsAccordion.isCollapsed(message.id)}
+                  collapsedAnnotations={annotationsAccordion.isCollapsed(message.id)}
                   onToggleThinking={thinkingAccordion.toggle}
                   onToggleSqlQueries={sqlQueriesAccordion.toggle}
                   onToggleCharts={handleChartToggle}
+                  onToggleAnnotations={annotationsAccordion.toggle}
                   onResendMessage={handleResendMessage}
                 />
               ))}

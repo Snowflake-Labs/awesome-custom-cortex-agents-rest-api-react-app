@@ -113,9 +113,12 @@ export const TEXT_CONSTANTS = {
   MESSAGE_LABELS: {
     USER: 'You',
     ASSISTANT: 'Snowflake Cortex Agent',
-    COPY_MESSAGE_TOOLTIP: 'Copy to clipboard',
+    COPY_USER_MESSAGE_TOOLTIP: 'Copy question to clipboard',
+    COPY_ASSISTANT_MESSAGE_TOOLTIP: 'Copy final response text to clipboard',
     COPY_SUCCESS: 'Copied to clipboard!',
-    RESEND_MESSAGE_TOOLTIP: 'Ask again'
+    RESEND_MESSAGE_TOOLTIP: 'Ask again',
+    DISCLAIMER: 'Agents can make mistakes, double-check responses.',
+    SOURCES_LABEL: 'Sources:'
   },
 
   // Response Headers and Analysis

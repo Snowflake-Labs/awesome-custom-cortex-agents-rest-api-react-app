@@ -25,6 +25,7 @@ import { ChatMessage as ChatMessageType } from '../../types/chat';
 import { ThinkingSteps } from './ThinkingSteps';
 import { SqlQueriesSection } from './SqlQueriesSection';
 import { ChartsSection } from './ChartsSection';
+import { AnnotationsSection } from './AnnotationsSection';
 import { MarkdownFormatter } from './MarkdownFormatter';
 import { CHAT_TEXT, MESSAGE_LABELS } from '../../constants/textConstants';
 
@@ -33,9 +34,11 @@ interface ChatMessageProps {
   collapsedThinking: boolean;
   collapsedSqlQueries: boolean;
   collapsedCharts: boolean;
+  collapsedAnnotations: boolean;
   onToggleThinking: (messageId: string) => void;
   onToggleSqlQueries: (messageId: string) => void;
   onToggleCharts: (messageId: string) => void;
+  onToggleAnnotations: (messageId: string) => void;
   onResendMessage?: (text: string) => void;
 }
 
@@ -44,9 +47,11 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   collapsedThinking,
   collapsedSqlQueries,
   collapsedCharts,
+  collapsedAnnotations,
   onToggleThinking,
   onToggleSqlQueries,
   onToggleCharts,
+  onToggleAnnotations,
   onResendMessage
 }) => {
   const theme = useTheme();
@@ -190,6 +195,19 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
             message.text && message.text.trim().length > 0 && (
               <Box>
                 <MarkdownFormatter content={message.text} theme={theme} />
+                
+                {/* Annotations Section - Display at bottom of response text */}
+                {message.status === 'sent' && 
+                 !message.isStreaming && 
+                 message.annotations && 
+                 message.annotations.length > 0 && (
+                  <AnnotationsSection
+                    messageId={message.id}
+                    annotations={message.annotations}
+                    collapsed={collapsedAnnotations}
+                    onToggle={onToggleAnnotations}
+                  />
+                )}
               </Box>
             )
           )}
@@ -251,7 +269,8 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
       </Card>
       
       {/* Action Buttons - Below the bubble */}
-      {(message.sender === 'user' || message.sender === 'assistant') && message.text && message.text.trim().length > 0 && (
+      {/* For User Messages - Show copy and re-ask buttons */}
+      {message.sender === 'user' && message.text && message.text.trim().length > 0 && (
         <Stack 
           direction="row" 
           spacing={0.5} 
@@ -265,7 +284,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
         >
           {/* Copy Button */}
           <Tooltip 
-            title={copySuccess ? MESSAGE_LABELS.COPY_SUCCESS : MESSAGE_LABELS.COPY_MESSAGE_TOOLTIP}
+            title={copySuccess ? MESSAGE_LABELS.COPY_SUCCESS : MESSAGE_LABELS.COPY_USER_MESSAGE_TOOLTIP}
             arrow
           >
             <IconButton
@@ -284,8 +303,8 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
             </IconButton>
           </Tooltip>
 
-          {/* Re-ask Button - Only for user messages */}
-          {message.sender === 'user' && onResendMessage && (
+          {/* Re-ask Button */}
+          {onResendMessage && (
             <Tooltip title={MESSAGE_LABELS.RESEND_MESSAGE_TOOLTIP} arrow>
               <IconButton
                 onClick={handleResend}
@@ -303,6 +322,56 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
               </IconButton>
             </Tooltip>
           )}
+        </Stack>
+      )}
+
+      {/* For Assistant Messages - Show disclaimer and copy button only when complete */}
+      {message.sender === 'assistant' && message.status === 'sent' && !message.isStreaming && message.text && message.text.trim().length > 0 && (
+        <Stack 
+          direction="row" 
+          spacing={1} 
+          sx={{ 
+            mt: 0.5,
+            justifyContent: 'center',
+            alignItems: 'center',
+            opacity: 0.7,
+            '&:hover': { opacity: 1 },
+            transition: 'opacity 0.2s'
+          }}
+        >
+          {/* Disclaimer - Hidden on mobile */}
+          <Typography 
+            variant="caption" 
+            color="text.secondary" 
+            sx={{ 
+              display: { xs: 'none', sm: 'block' },
+              fontSize: '0.8rem',
+              textAlign: 'center'
+            }}
+          >
+            {MESSAGE_LABELS.DISCLAIMER}
+          </Typography>
+
+          {/* Copy Button */}
+          <Tooltip 
+            title={copySuccess ? MESSAGE_LABELS.COPY_SUCCESS : MESSAGE_LABELS.COPY_ASSISTANT_MESSAGE_TOOLTIP}
+            arrow
+          >
+            <IconButton
+              onClick={handleCopy}
+              size="small"
+              sx={{
+                color: 'text.secondary',
+                padding: '4px',
+                '&:hover': {
+                  color: 'primary.main',
+                  backgroundColor: alpha(theme.palette.primary.main, 0.1)
+                }
+              }}
+            >
+              <CopyIcon sx={{ fontSize: 18 }} />
+            </IconButton>
+          </Tooltip>
         </Stack>
       )}
       </Box>
