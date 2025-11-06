@@ -39,7 +39,18 @@ Use this as a starter project or template and extend or customize it. Also note 
 
 Clone this repository to get the required files.
 
-    > #### Expand to see the folder strucure and files details.
+* Folders
+    - `src/` 
+    - `server/` 
+ 
+* Files
+    - `craco.config.js`
+    - `package.json`
+    - `tsconfig.json`
+    - `env.backend.example`
+    - `env.frontend.example`
+
+    > #### Expand to see the folder structure and files details.
     <details>
 
     ```
